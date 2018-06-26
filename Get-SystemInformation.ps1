@@ -31,7 +31,7 @@
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name OperatingSystem -Value $windowsInfo
 
     $30Days = ((Get-Date).AddDays(-30))
-    $bugChecks = Get-WinEvent -FilterHashtable @{Logname='Security'; ID=@(1001); StartTime=$30Days} -ErrorAction SilentlyContinue
+    $bugChecks = Get-WinEvent -FilterHashtable @{Logname='System'; ID=@(1001); StartTime=$30Days} -ErrorAction SilentlyContinue
     if($bugChecks -ne $null)
     {
         Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name BugChecks -Value $bugChecks
