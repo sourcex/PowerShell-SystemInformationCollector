@@ -14,8 +14,7 @@
     $chassisModel =(Get-CimInstance win32_SystemEnclosure).Model
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name Chassis_Manufacturer -Value $chassisManufacturer
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name Chassis_Model -Value $chassisModel
-
-
+    
     $systemManufacturer = (Get-CimInstance win32_ComputerSystem).Manufacturer
     $systemModel = (Get-CimInstance win32_ComputerSystem).Model
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name System_Manufacturer -Value $systemManufacturer
@@ -23,6 +22,9 @@
 
     $videoCards = (Get-CimInstance Win32_VideoController | Select Name, DriverVersion, PNPDeviceID)
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name VideoAdapters -Value $videoCards
+
+    $drives = Get-Disk | Select FriendlyName, SerialNumber, BusType, HealthStatus, OperationalStatus, Size, PartitionStyle, FirmwareVersion
+    Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name Drives -Value $drives
 
     $networkAdapters = Get-NetAdapter | Select Name, MacAddress, DriverVersion
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name NetworkAdapters -Value $networkAdapters
