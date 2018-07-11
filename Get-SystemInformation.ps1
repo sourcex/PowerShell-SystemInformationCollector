@@ -32,6 +32,9 @@
     $windowsInfo = Get-CimInstance Win32_OperatingSystem | Select Caption, Version, OSArchitecture
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name OperatingSystem -Value $windowsInfo
 
+    $assetTag = (Get-CimInstance Win32_SystemEnclosure).SMBIOSAssetTag
+    Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name AssetTag -Value $assetTag
+
     $30Days = ((Get-Date).AddDays(-30))
     $bugChecks = Get-WinEvent -FilterHashtable @{Logname='System'; ID=@(1001); StartTime=$30Days} -ErrorAction SilentlyContinue
     if($bugChecks -ne $null)
