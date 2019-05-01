@@ -17,8 +17,10 @@
     
     $systemManufacturer = (Get-CimInstance win32_ComputerSystem).Manufacturer
     $systemModel = (Get-CimInstance win32_ComputerSystem).Model
+    $computerName = (Get-CimInstance win32_ComputerSystem).Name
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name System_Manufacturer -Value $systemManufacturer
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name System_Model -Value $systemModel
+    Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name ComputerName -Value $computerName
 
     $videoCards = (Get-CimInstance Win32_VideoController | Select Name, DriverVersion, PNPDeviceID)
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name VideoAdapters -Value $videoCards
