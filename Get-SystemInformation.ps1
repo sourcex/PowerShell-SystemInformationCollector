@@ -3,7 +3,7 @@
     $systemInformation = New-Object -TypeName PSObject
 
     $time = (Get-Date).ToUniversalTime()
-    Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name Created -Value $time
+    Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name CapturedDateTime -Value $time
 
     $serialNumber = (Get-CimInstance Win32_BIOS).SerialNumber
     $SMBIOSBIOSVersion = (Get-CimInstance Win32_BIOS).SMBIOSBIOSVersion
@@ -23,6 +23,9 @@
     $videoCards = (Get-CimInstance Win32_VideoController | Select Name, DriverVersion, PNPDeviceID)
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name VideoAdapters -Value $videoCards
 
+    $memory = Get-CimInstance Win32_PhysicalMemory | Select Manufacturer, Model, PartNumber, SerialNumber, Capacity, MaxVoltage
+    Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name Memory -Value $memory
+
     $drives = Get-Disk | Select FriendlyName, SerialNumber, BusType, HealthStatus, OperationalStatus, Size, PartitionStyle, FirmwareVersion
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name Drives -Value $drives
 
@@ -31,6 +34,9 @@
 
     $windowsInfo = Get-CimInstance Win32_OperatingSystem | Select Caption, Version, OSArchitecture
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name OperatingSystem -Value $windowsInfo
+
+    $currentUser = (Get-CimInstance win32_ComputerSystem).UserName
+    Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name CurrentUser -Value $currentUser
 
     $assetTag = (Get-CimInstance Win32_SystemEnclosure).SMBIOSAssetTag
     Add-Member -InputObject $systemInformation -MemberType NoteProperty -Name AssetTag -Value $assetTag
